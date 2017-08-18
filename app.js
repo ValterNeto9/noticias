@@ -1,26 +1,12 @@
-const express = require('express');
+//INFORMAÇÕES ESTRUTURAIS
 
-const app = express();
+const app = require('./config/server');
 
-app.set('view engione', 'ejs');
-
-app.get('/', (req, res)=>{
-
-  res.send('<html><h1>Portal de Noticias</h1></html>')
-})
-app.get('/tecnologia', (req, res)=>{
-
-  res.send('<html><h1>Portal de Tecnologia</h1></html>')
-})
-app.get('/moda', (req, res)=>{
-
-  res.send('<html><h1>Portal de Moda</h1></html>')
-})
-app.get('/beleza', (req, res)=>{
-
-  res.send('<html><h1>Portal de Beleza</h1></html>')
-})
+const rotaHome = require('./app/routes/home')(app);
+const formInclusaoNoticia = require('./app/routes/form_inclusao_noticias')(app);
+const rotaNoticias = require('./app/routes/noticias')(app);
+//rotaNoticias(app);
 
 app.listen(3000, (req, res)=>{
-  console.log('server rodando com express');
+  console.log('Server On');
 });
