@@ -1,16 +1,15 @@
-
 module.exports = (app) =>{
   
-    app.get('/noticias', (req, res)=>{
+    app.get('/noticia', (req, res)=>{
       
       const connection = app.config.dbConnection();
       
       const noticiasModel = app.app.models.noticiasModel;
       
-      noticiasModel.getNoticias(connection, (err, result) => {
+      noticiasModel.getNoticia(connection, (err, result) => {
         
         if(!err){
-          res.render("noticias/noticias", {noticias : result});
+          res.render("noticias/noticia", {noticia : result});
         }else{
           console.log(err);
         }
