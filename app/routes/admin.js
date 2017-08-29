@@ -6,10 +6,24 @@ module.exports = (app) =>{
   app.post('/noticias/salvar',(req, res)=>{
     const noticia = req.body;
     
-    const connection = app.config.dbConnection();
-    const noticiasModel = app.app.models.noticiasModel;
+    req.assert('titulo','titulo é obrigatório!').notEmpty();
+    req.assert('resumo','resumo é obrigatório!').notEmpty();
+    req.assert('resumo','resumo deve conter entre 10 e 100 caracteres!').len(10, 100);
+    req.assert('autor','autor é obrigatório!').notEmpty();
+    req.assert('data_noticia','data é obrigatório!').notEmpty().isDate({format: 'YYYY-MM-DD'});
+    req.assert('noticia','noticia é obrigatório!').notEmpty();
     
-    noticiasModel.salvarNoticia(noticia, connection, (err, result) => {
+    const errors = req.validationErrors();
+    
+    if(errors){
+      res.render("admin/form_add_noticia", {validacao: errors});
+      return;
+    }
+    
+    const connection = app.config.dbConnection();
+    const noticiasModel = new app.app.models.NoticiasDAO(connection);
+    
+    noticiasModel.salvarNoticia(noticia, (err, result) => {
       if(!err){
         res.redirect("/noticias");
       }else{
